@@ -1,0 +1,38 @@
+<p>&nbsp;</p>
+<div class="container">
+    <h2>Add new Student</h2>
+    <form #addStudentForm="ngForm" (ngSubmit)="addStudent()">
+        <div class="form-group">
+            <label for="id">Student Id:</label>
+            <input type="text" class="form-control" required [(ngModel)]="student.student_id" name="student_id">
+        </div>
+        <div class="form-group">
+            <label for="name">First Name:</label>
+            <input type="text" class="form-control" required [(ngModel)]="student.first_name" name="first_name">
+        </div>
+        <div class="form-group">
+            <label for="name">Last Name:</label>
+            <input type="text" class="form-control" required [(ngModel)]="student.last_name" name="last_name">
+        </div>
+        <div class="form-group">
+            <label for="description">Email:</label>
+            <input type="text" class="form-control" required [(ngModel)]="student.email" name="description">
+        </div>
+        <div class="form-group">
+            <label for="price">Date of birth:</label>
+            <input type="text" class="form-control" required [(ngModel)]="student.date_of_birth" name="date_of_birth">
+        </div>
+        <div class="form-group">
+            <label for="price">Birth place:</label>
+            <input type="text" class="form-control" required [(ngModel)]="student.birth_place" name="birth_place">
+        </div>
+
+        <div class="form-group">
+            <label for="price">Final grade:</label>
+            <input type="text" class="form-control" required [(ngModel)]="student.final_grade" name="price">
+        </div>
+        <p>&nbsp;</p>
+        <button type="submit" class="btn btn-success">Submit</button>&nbsp;
+        <button type="submit" class="btn btn-secondary" (click)="redirectStudentList()">Back</button>
+    </form>
+</div>

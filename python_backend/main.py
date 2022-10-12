@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from database import engine, SessionLocal
 from fastapi import FastAPI, HTTPException, Depends, Response, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 import models
 import datetime
@@ -10,6 +11,18 @@ import xml.etree.ElementTree as ET
 # CREATE API
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
+
+
+origins = ["*"]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # CONNECT TO DATABASE
@@ -24,7 +37,7 @@ def get_db():
 
 # GET STUDENT LIST
 @app.get("/")
-def get_students(db: Session = Depends(get_db)):
+async def get_students(db: Session = Depends(get_db)):
     model_students = db.query(models.Students).all()
     root = ET.Element("students")
     for item in model_students:
@@ -34,11 +47,11 @@ def get_students(db: Session = Depends(get_db)):
         ET.SubElement(student, "first_name").text = item.first_name
         ET.SubElement(student, "last_name").text = item.last_name
         ET.SubElement(student, "email").text = item.email
-        ET.SubElement(student, "birth_year").text = str(item.birth_year)
+        ET.SubElement(student, "date_of_birth").text = str(item.date_of_birth)
         ET.SubElement(student, "birth_place").text = item.birth_place
         ET.SubElement(student, "final_grade").text = str(item.final_grade)
     result = ET.tostring(root)
-    return Response(content=result, media_type="application/xml")
+    return Response(content=result, media_type="text/xml")
 
 
 # GET STUDENT BY ID
@@ -57,7 +70,7 @@ def get_student_by_id(id: int, db: Session = Depends(get_db)):
     ET.SubElement(student, "first_name").text = student_model.first_name
     ET.SubElement(student, "last_name").text = student_model.last_name
     ET.SubElement(student, "email").text = student_model.email
-    ET.SubElement(student, "birth_year").text = str(student_model.birth_year)
+    ET.SubElement(student, "date_of_birth").text = str(student_model.date_of_birth)
     ET.SubElement(student, "birth_place").text = student_model.birth_place
     ET.SubElement(student, "final_grade").text = str(student_model.final_grade)
     result = ET.tostring(student)
@@ -76,7 +89,7 @@ async def create_student(request: Request, db: Session = Depends(get_db)):
         student_model.first_name = student.find("first_name").text
         student_model.last_name = student.find("last_name").text
         student_model.email = student.find("email").text
-        student_model.birth_year = datetime.datetime.strptime(student.find("birth_year").text, '%Y-%m-%d').date()
+        student_model.date_of_birth = datetime.datetime.strptime(student.find("date_of_birth").text, '%Y-%m-%d').date()
         student_model.birth_place = student.find("birth_place").text
         student_model.final_grade = float(student.find("final_grade").text)
         db.add(student_model)
@@ -107,7 +120,7 @@ async def update_student(id: int, request: Request, db: Session = Depends(get_db
         student_model.first_name = student.find("first_name").text
         student_model.last_name = student.find("last_name").text
         student_model.email = student.find("email").text
-        student_model.birth_year = datetime.datetime.strptime(student.find("birth_year").text, '%Y-%m-%d').date()
+        student_model.date_of_birth = datetime.datetime.strptime(student.find("date_of_birth").text, '%Y-%m-%d').date()
         student_model.birth_place = student.find("birth_place").text
         student_model.final_grade = float(student.find("final_grade").text)
         db.add(student_model)

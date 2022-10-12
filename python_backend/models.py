@@ -11,6 +11,6 @@ class Students(Base):
     first_name = Column(String)
     last_name = Column(String)
     email = Column(String)
-    birth_year = Column(Date)
+    date_of_birth = Column(Date)
     birth_place = Column(String)
     final_grade = Column(Float)
