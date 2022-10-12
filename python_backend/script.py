@@ -32,16 +32,17 @@ for char in range(ord('A'), ord('H') + 1):
 
 
 # READ FROM XML TO XLSX
+row_index = 2
 for student in students:
-    for row_index in range(2, len(students) + 2):
-        work_sheet['A' + str(row_index)] = student.attrib['id']
-        work_sheet['B' + str(row_index)] = student.find('student_id').text
-        work_sheet['C' + str(row_index)] = student.find('first_name').text
-        work_sheet['D' + str(row_index)] = student.find('last_name').text
-        work_sheet['E' + str(row_index)] = student.find('email').text
-        work_sheet['F' + str(row_index)] = student.find('date_of_birth').text
-        work_sheet['G' + str(row_index)] = student.find('birth_place').text
-        work_sheet['H' + str(row_index)] = student.find('final_grade').text
+    work_sheet['A' + str(row_index)] = student.attrib['id']
+    work_sheet['B' + str(row_index)] = student.find('student_id').text
+    work_sheet['C' + str(row_index)] = student.find('first_name').text
+    work_sheet['D' + str(row_index)] = student.find('last_name').text
+    work_sheet['E' + str(row_index)] = student.find('email').text
+    work_sheet['F' + str(row_index)] = student.find('date_of_birth').text
+    work_sheet['G' + str(row_index)] = student.find('birth_place').text
+    work_sheet['H' + str(row_index)] = student.find('final_grade').text
+    row_index += 1
     
 work_book.save(filename="Students.xlsx")
 print(">>> SCRIPT RUNNING COMPLETE...")
